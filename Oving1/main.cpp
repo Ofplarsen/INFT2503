@@ -11,7 +11,7 @@ int main() {
     const int length = 6;
     double temperatures[length];
     // Oving 1 a)
-    /*
+
 
     cout << "Du skal skrive inn " << length << " temperaturer." << endl;
 
@@ -19,7 +19,7 @@ int main() {
         cout << "Temperatur nr " << i + 1 << ": ";
         cin >> temperatures[i];
     }
-    */
+
 
     //Oving 1 b)
     read_temperatures(temperatures, length);
