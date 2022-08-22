@@ -72,6 +72,7 @@ void task4(){
     int a = 5;
     int &b; //ref must be inited on creation
     int *c; //Pointer should be pointing to null, if not inited
+    c = &b;
     *a = *b + *c; // Must assign type of pointer
     &b = 2;
     */
@@ -79,8 +80,8 @@ void task4(){
     int a = 5;
     int b = 0; //ref must be inited on creation
     int c = 0; //Pointer should be pointing to null, if not inited
-    int *bp = &b;
-    a = *bp + c; // Must assign type of pointer
+    c = b;
+    a = b + c; // Must assign type of pointer
     cout << a << endl;
     b = 2;
     cout << a << endl;
