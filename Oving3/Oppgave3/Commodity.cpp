@@ -5,23 +5,17 @@
 #include "Commodity.h"
 
 Commodity::Commodity(string name, int id, double price) {
-
-}
-
-string Commodity::get_name() {
-    return std::string();
-}
-
-int Commodity::get_id() {
-    return 0;
-}
-
-double Commodity::get_price() {
-    return 0;
+    this->name = name;
+    this->id = id;
+    this->price = price;
 }
 
 void Commodity::set_price(double price) {
+    this->price = price;
+}
 
+double Commodity::get_price_with_sales_tax(double quantity) const{
+    return price * quantity * 1.25;
 }
 
 
