@@ -15,7 +15,7 @@ void Commodity::set_price(double price) {
 }
 
 double Commodity::get_price_with_sales_tax(double quantity) const{
-    return price * quantity * 1.25;
+    return price * quantity * moms;
 }
 
 
