@@ -14,6 +14,8 @@ public:
     Gtk::Label label_last_name;
     Gtk::Label label;
     Window() {
+        this->set_title("Øving 4");
+
         button.set_label("Combine names");
         label_first_name.set_text("First name");
         label_last_name.set_text("Last name");
@@ -25,17 +27,25 @@ public:
         vbox.pack_start(entry_last_name);
         vbox.pack_start(button);
         vbox.pack_start(label);
-
+        button.set_sensitive(false);
 
         add(vbox);
         show_all();
 
+
+
         entry_first_name.signal_changed().connect([this] () {
-            //label.set_text("Entry now contains: " + entry.get_text());
+            if(entry_last_name.get_text().empty() || entry_first_name.get_text().empty())
+                button.set_sensitive(false);
+            else
+                button.set_sensitive(true);
         });
 
-        entry_first_name.signal_activate().connect([this] () {
-            //label.set_text("Entry activated: " + entry.get_text());
+        entry_last_name.signal_changed().connect([this] () {
+            if(entry_last_name.get_text().empty() || entry_first_name.get_text().empty())
+                button.set_sensitive(false);
+            else
+                button.set_sensitive(true);
         });
 
         button.signal_clicked().connect([this]() {
