@@ -28,6 +28,9 @@ public:
 
         /// Returns true if the given chess piece move is valid
         virtual bool valid_move(int from_x, int from_y, int to_x, int to_y) const = 0;
+
+        virtual std::string short_type() const = 0;
+
     };
 
     class King : public Piece {
@@ -48,6 +51,10 @@ public:
 
             return (abs(to_x - from_x) * abs(to_y - from_y) == 1);
         }
+
+        std::string short_type() const override{
+            return color == Color::WHITE ? "WKi" : "BKi";
+        }
     };
 
     class Knight : public Piece {
@@ -65,6 +72,10 @@ public:
                 return false;
 
             return (abs((to_x - from_x) * (to_y - from_y)) == 2);
+        }
+
+        std::string short_type() const override{
+            return color == Color::WHITE ? "WKn" : "BKn";
         }
     };
 
@@ -103,6 +114,7 @@ public:
                     }
                 }
                 piece_to = move(piece_from);
+                print_board();
                 return true;
             } else {
                 cout << "can not move " << piece_from->type() << " from " << from << " to " << to << endl;
@@ -112,6 +124,20 @@ public:
             cout << "no piece at " << from << endl;
             return false;
         }
+
+    }
+
+    std::string** print_board(){
+        for(auto & square : squares){
+            for(int y = 0; y < squares[0].size(); y++){
+                if(square[y].get() == nullptr)
+                    cout << "***" << " ";
+                else
+                    cout << square[y]->short_type() << " ";
+            }
+            cout << endl;
+        }
+        cout << endl;
     }
 };
 
