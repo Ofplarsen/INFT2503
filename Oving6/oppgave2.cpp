@@ -24,14 +24,18 @@ private:
                          [this, connection, read_buffer](const boost::system::error_code &ec, size_t) {
                              // If not error:
                              if (!ec) {
+                                 std::string message;
                                  // Retrieve message from client as string:
                                  istream read_stream(read_buffer.get());
-                                 std::string message;
+
                                  getline(read_stream, message);
                                  message.pop_back(); // Remove "\r" at the end of message
 
                                  // Close connection when "exit" is retrieved from client
                                  if (message == "exit")
+                                     return;
+                                 //Checks if not get-request
+                                 if(message.find("GET") == std::string::npos)
                                      return;
 
                                  cout << "Message from a connected client: " << message << endl;
@@ -39,18 +43,27 @@ private:
                                  auto write_buffer = make_shared<boost::asio::streambuf>();
                                  ostream write_stream(write_buffer.get());
 
-                                 if(message == "en_side"){
+                                 if(message == "GET /en_side HTTP/1.1"){
                                      message = "Dette er en side";
                                  }else if(message == "GET / HTTP/1.1"){
                                      message = "Dette er hovedsiden";
                                  }else{
                                      message = "404 Not Found";
                                  }
+                                 {
+                                     std::string answer = "HTTP/1.1 200 OK\r\n"
+                                                          "Accept-Ranges: bytes\r\n"
+                                                          "Content-Length: 60\r\n"
+                                                          "Connection: close\r\n"
+                                                          "Content-Type: text/html\r\n"
+                                                          "X-Pad: avoid browser bug\r\n"
+                                                          "\r\n\r\n"
+                                                          "<html><body><h1>" + message + "</h1></body></html>";
 
-
-                                 // Add message to be written to client:
-                                 write_stream << message << "\r\n";
-
+                                     // Add message to be written to client:
+                                     cout << answer << endl;
+                                     write_stream << answer << "\r\n";
+                                 }
                                  // Write to client
                                  async_write(connection->socket, *write_buffer,
                                              [this, connection, write_buffer](const boost::system::error_code &ec, size_t) {
