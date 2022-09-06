@@ -39,6 +39,15 @@ private:
                                  auto write_buffer = make_shared<boost::asio::streambuf>();
                                  ostream write_stream(write_buffer.get());
 
+                                 if(message == "en_side"){
+                                     message = "Dette er en side";
+                                 }else if(message == "GET / HTTP/1.1"){
+                                     message = "Dette er hovedsiden";
+                                 }else{
+                                     message = "404 Not Found";
+                                 }
+
+
                                  // Add message to be written to client:
                                  write_stream << message << "\r\n";
 
