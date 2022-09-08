@@ -18,6 +18,7 @@ public:
     void set(int numerator_, int denominator_ = 1);
     Fraction operator+(const Fraction &other) const;
     Fraction operator-(int numerator) const;
+    Fraction operator-(const Fraction &other) const;
     Fraction operator*(const Fraction &other) const;
     Fraction operator/(const Fraction &other) const;
     Fraction operator-() const;
