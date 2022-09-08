@@ -11,9 +11,16 @@ class Set {
 private:
     vector<int> numbers;
 public:
-    Set();
-    Set operator+(const Set &other);
-};
+    const vector<int> &getNumbers() const;
 
+    Set();
+    Set(vector<int> numbers);
+    Set operator*(const Set &other);
+    Set operator+(int number);
+    Set &operator=(const Set &other);
+
+
+};
+ostream &operator<<(ostream &out, const Set &set);
 
 #endif //OVING7_SET_H
