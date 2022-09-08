@@ -39,4 +39,5 @@ private:
     void reduce();
     int compare(const Fraction &other) const;
 };
+Fraction operator-(int integer, const Fraction &other);
 #endif //OVING7_FRACTION_H

@@ -145,6 +145,12 @@ void Fraction::reduce() {
     denominator /= a;
 }
 
+Fraction operator-(int integer, const Fraction &other){
+    Fraction fraction;
+    fraction = other - integer;
+    return fraction;
+}
+
 //-------------------------------------------------------------------
 //
 // Returnerer +1 hvis *this > other, 0 hvis de er like, -1 ellers
