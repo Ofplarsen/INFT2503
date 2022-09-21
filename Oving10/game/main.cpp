@@ -131,11 +131,6 @@ public:
     dynamics.setGravity(btVector3(0, -10.0, 0));
 
     //Add objects to the physics engine
-    dynamics.addRigidBody(&ground.body);
-    dynamics.addRigidBody(&ground_sphere.body);
-    dynamics.addRigidBody(&falling_sphere.body);
-    for (auto &cube : cubes)
-      dynamics.addRigidBody(&cube.body);
 
     btTransform transform;
 
@@ -164,6 +159,55 @@ public:
     cubes[4].body.setCenterOfMassTransform(transform);
     transform.setOrigin(btVector3(-1.0, 0.5, 0.0));
     cubes[5].body.setCenterOfMassTransform(transform);
+  }
+
+  void reset(){
+      //dynamics.setGravity(btVector3(0, -10.0, 0));
+
+      //Add objects to the physics engine
+      btTransform transform;
+
+      //Position ground
+      transform.setIdentity();
+      transform.setOrigin(btVector3(0.0, 0.0, 0.0));
+      ground.body.setCenterOfMassTransform(transform);
+
+      //Position spheres
+      transform.setOrigin(btVector3(1.0, 0.1, 0.0));
+      ground_sphere.body.setCenterOfMassTransform(transform);
+
+      transform.setOrigin(btVector3(0.9, 3.0, 0.0));
+      falling_sphere.body.setCenterOfMassTransform(transform);
+
+      //Position cubes
+      transform.setOrigin(btVector3(-1.0, 0.1, -0.2));
+      cubes[0].body.setCenterOfMassTransform(transform);
+      transform.setOrigin(btVector3(-1.0, 0.1, 0.0));
+      cubes[1].body.setCenterOfMassTransform(transform);
+      transform.setOrigin(btVector3(-1.0, 0.1, 0.2));
+      cubes[2].body.setCenterOfMassTransform(transform);
+      transform.setOrigin(btVector3(-1.0, 0.3, -0.1));
+      cubes[3].body.setCenterOfMassTransform(transform);
+      transform.setOrigin(btVector3(-1.0, 0.3, 0.1));
+      cubes[4].body.setCenterOfMassTransform(transform);
+      transform.setOrigin(btVector3(-1.0, 0.5, 0.0));
+      cubes[5].body.setCenterOfMassTransform(transform);
+  }
+
+  void addPhysics(){
+      dynamics.addRigidBody(&ground.body);
+      dynamics.addRigidBody(&ground_sphere.body);
+      dynamics.addRigidBody(&falling_sphere.body);
+      for (auto &cube : cubes)
+          dynamics.addRigidBody(&cube.body);
+  }
+
+  void removePhysics(){
+      dynamics.removeRigidBody(&ground.body);
+      dynamics.removeRigidBody(&ground_sphere.body);
+      dynamics.removeRigidBody(&falling_sphere.body);
+      for (auto &cube : cubes)
+          dynamics.removeRigidBody(&cube.body);
   }
 
   void draw() {
@@ -219,6 +263,7 @@ public:
   }
 
   void start() {
+    bool dropped = false;
     glm::vec3 camera(0.0, 1.0, 6.0);
 
     sf::Clock delta_clock;
@@ -245,18 +290,35 @@ public:
 
       ImGui::Begin("ImGui");
       if (ImGui::Button("Restart game")) {
-        // Implementation needed
+          world.removePhysics();
+          world.reset();
+          dropped = false;
       }
       if (ImGui::Button("Drop ball")) {
-        // Implementation needed
+          if(!dropped){
+              world.addPhysics();
+              dropped = true;
+          }else
+              std::cout << "Already dropped" << std::endl;
       }
-      float horizontal_position;
+      float horizontal_position = 0.9;
+      float vertical_position = 3.0;
       if (ImGui::SliderFloat("Horizontal ball position", &horizontal_position, 0.0, 10.0)) {
-        // Implementation needed
+          btTransform transform;
+          world.reset();
+          transform.setOrigin(btVector3(horizontal_position, vertical_position, 0.0));
+          world.falling_sphere.body.setCenterOfMassTransform(transform);
+          world.removePhysics();
+          dropped = false;
       }
-      float vertical_position;
+
       if (ImGui::VSliderFloat("Vertical ball position", {20, 100}, &vertical_position, 0.0, 10.0)) {
-        // Implementation needed
+          btTransform transform;
+          world.reset();
+          transform.setOrigin(btVector3(horizontal_position, vertical_position, 0.0));
+          world.falling_sphere.body.setCenterOfMassTransform(transform);
+          world.removePhysics();
+          dropped = false;
       }
       ImGui::End();
 
